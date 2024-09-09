@@ -1,6 +1,6 @@
 TARGET=Vetshore
 
-all: build
+all: tests build
 
 build: 
 #	@tailwindcss -o ./public/css/styles.css -c ./tailwind.config.js
@@ -12,6 +12,14 @@ nrun: build run
 run:
 	@bin/$(TARGET)
 
+tests: test
+
+test:
+	@go test ./tests/...
+
+testV:
+	go test -v ./tests/...
+
 dev:
 	@air -c ".air.toml"
 
@@ -19,4 +27,4 @@ clean:
 	@rm bin/*
 	@rmdir bin
 
-.PHONY: build nrun run dev clean
+.PHONY: build nrun run test tests dev clean

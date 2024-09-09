@@ -2,10 +2,12 @@ package model
 
 import (
 	"fmt"
+	"regexp"
+
 	"github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/google/uuid"
-	"regexp"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -45,6 +47,16 @@ func (u *User) Validate() (*User, error) {
 	if err := u.isValidUsername(); err != nil {
 		return &User{}, err
 	}
+	return u, nil
+}
+
+func (u *User) HashPassword() (*User, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return &User{}, err
+	}
+	u.Password = string(hashedPassword)
+
 	return u, nil
 }
 

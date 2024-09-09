@@ -3,15 +3,21 @@ package server
 import (
 	"log"
 	"net/http"
+
+	"github.com/jqwez/caselore/database"
 )
 
 type Server struct {
 	Mux        *http.ServeMux
-	Repository interface{}
+	Repository *database.Repository
 }
 
-func NewServer(repository interface{}) *Server {
+func NewServer(repository *database.Repository) *Server {
+	mux := http.NewServeMux()
+	RegisterPageRoutes(mux)
+	RegisterAPI(mux)
 	return &Server{
+		Mux:        mux,
 		Repository: repository,
 	}
 }

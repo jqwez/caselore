@@ -1,7 +1,7 @@
 package sqlite_test
 
 import (
-	"github.com/jqwez/caselore/repo/sqlite"
+	"github.com/jqwez/caselore/database/sqlite"
 	"testing"
 )
 

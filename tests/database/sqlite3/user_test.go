@@ -4,11 +4,14 @@ import (
 	"os"
 	"testing"
 
+	"github.com/jqwez/caselore/database"
+	"github.com/jqwez/caselore/database/sqlite"
 	"github.com/jqwez/caselore/model"
-	"github.com/jqwez/caselore/repo"
 )
 
-var userRepo, db = repo.NewUserRepository("mem_sqlite")
+var repository = database.NewRepository().SetFromDBType(sqlite.NewSQLiteRepository())
+var userRepo = repository.UserRepository
+var db = repository.Database
 
 func TestMain(m *testing.M) {
 	err := userRepo.CreateTable()
@@ -19,6 +22,7 @@ func TestMain(m *testing.M) {
 	code := m.Run()
 
 	db.Close()
+
 	os.Exit(code)
 }
 
@@ -85,6 +89,38 @@ func TestUserUpdate(t *testing.T) {
 			t.Log(user.Username)
 			t.Log(newUsername)
 			t.Fatal("Usernames do not match")
+		}
+	})
+}
+
+func TestUserDelete(t *testing.T) {
+	u := &model.User{
+		Username: "testUpdateUser",
+		Password: "testPassword",
+		Role:     "user",
+	}
+	userRepo.Create(u)
+	id := u.ID
+	t.Run("Username should be obtainable", func(*testing.T) {
+		user, err := userRepo.GetByID(u.ID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if user.ID != id {
+			t.Fatal("Did not obtain user")
+		}
+	})
+	t.Run("Username should not obtainable", func(*testing.T) {
+		err := userRepo.Delete(id)
+		if err != nil {
+			t.Fatal("Failed delete operation")
+		}
+		user, err := userRepo.GetByID(u.ID)
+		if err == nil {
+			t.Fatal(err)
+		}
+		if user.ID == id {
+			t.Fail()
 		}
 	})
 }

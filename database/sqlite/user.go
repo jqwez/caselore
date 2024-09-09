@@ -23,6 +23,7 @@ func (ur *SQLiteUserRepository) Create(user *model.User) error {
 		VALUES (?, ?, ?, ?)
 		`
 	user, err := user.Validate()
+	user.HashPassword()
 	if err != nil {
 		return err
 	}
@@ -67,6 +68,11 @@ func (ur *SQLiteUserRepository) GetByID(id uuid.UUID) (*model.User, error) {
 }
 
 func (ur *SQLiteUserRepository) Delete(id uuid.UUID) error {
+	query := "DELETE FROM users WHERE id = ?"
+	_, err := ur.conn.Exec(query, id.String())
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

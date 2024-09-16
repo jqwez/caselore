@@ -17,7 +17,7 @@ type SQLiteRepository struct {
 
 func NewSQLiteRepository() *SQLiteRepository {
 	r := &SQLiteRepository{}
-	r.Database = NewSQLiteConnection("data.dat")
+	r.Database = NewSQLiteConnection("vetshore_data.dat")
 	r.UserRepository = NewUserRepository(r.Database)
 	return r
 }

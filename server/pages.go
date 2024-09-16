@@ -1,9 +1,15 @@
 package server
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+
+	"github.com/jqwez/caselore/view/pages"
+)
 
 func RegisterPageRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/", HandleRoot)
+	mux.HandleFunc("/dashboard", HandleDashboard)
 }
 
 func HandleRoot(w http.ResponseWriter, r *http.Request) {
@@ -12,5 +18,11 @@ func HandleRoot(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	w.Write([]byte("hello"))
+
+	pages.Index().Render(context.Background(), w)
+}
+
+func HandleDashboard(w http.ResponseWriter, r *http.Request) {
+
+	pages.Dashboard().Render(context.Background(), w)
 }

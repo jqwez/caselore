@@ -1,0 +1,33 @@
+package components
+
+import "fmt"
+
+templ Sidebar() {
+  <aside class="bg-gray-800 text-white p-4 min-h-full">
+    <ul class="text-center">
+      @SLink(""){ Home }
+      @SLink("cases"){ Cases }
+      @SLink("tasks"){ Tasks }
+      @SLink("settings"){ Settings }
+    </ul>
+  </aside>
+}
+
+templ SLink(route string) {
+  <li class="select-none py-4 font-semibold hover:text-orange-300 transition-color"> 
+    <button 
+    hx-get={ dashboardRoute(route) }
+    hx-trigger="click"
+    hx-target="#main-dashboard-area"
+    hx-swap="innerHTML" 
+    hx-select-oob="#header-breadcrumb"
+    hx-swap-oob="true"
+    >
+    { children... } 
+    </button>
+  </li>
+}
+
+func dashboardRoute(r string) string {
+  return string(templ.URL(fmt.Sprintf("/htmx/dashboard/%s", r)))
+}

@@ -2,10 +2,20 @@ TARGET=Vetshore
 
 all: tests build
 
-build: 
-#	@tailwindcss -o ./public/css/styles.css -c ./tailwind.config.js
-	@templ generate view
+build: prebuild
 	@go build -o bin/$(TARGET) main.go
+
+release: tests prebuild
+	@CGO_ENABLED=1 go build -ldflags="-s -w" -a -installsuffix cgo -o bin/$(TARGET) main.go
+	@cp -r public bin/public
+
+windows: tests prebuild
+	CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o bin/$(TARGET).exe main.go
+	@cp -r public bin/public
+
+prebuild:
+	@tailwindcss -o ./public/css/styles.css -c ./tailwind.config.js
+	@templ generate view
 
 nrun: build run
 
@@ -24,7 +34,7 @@ dev:
 	@air -c ".air.toml"
 
 clean:
+	@rm -rf bin/public
 	@rm bin/*
-	@rmdir bin
 
-.PHONY: build nrun run test tests dev clean
+.PHONY: build prebuild release nrun run test tests dev clean

@@ -19,25 +19,20 @@ type User struct {
 }
 
 func (u *User) CreateUUID() error {
-	_, err := uuid.Parse(u.ID.String())
-	if err == nil && u.ID != uuid.Nil {
-		return err
-	}
-	id, err := uuid.NewRandom()
-	if err != nil {
-		return err
-	}
-	u.ID = id
+	return ModelCreateUUID(u)
+}
+
+func (u *User) GetID() uuid.UUID {
+	return u.ID
+}
+
+func (u *User) SetID(_id uuid.UUID) error {
+	u.ID = _id
 	return nil
 }
 
 func (u *User) SetIDString(idString string) error {
-	id, err := uuid.Parse(idString)
-	if err != nil {
-		return err
-	}
-	u.ID = id
-	return nil
+	return ModelSetUUIDString(u, idString)
 }
 
 func (u *User) Validate() (*User, error) {

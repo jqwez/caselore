@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/jqwez/caselore/database"
+	"github.com/jqwez/caselore/server/dashboard"
 )
 
 type Server struct {
@@ -15,7 +16,9 @@ type Server struct {
 func NewServer(repository *database.Repository) *Server {
 	mux := http.NewServeMux()
 	RegisterPageRoutes(mux)
+	dashboard.RegisterDashboard(mux)
 	RegisterAPI(mux)
+	RegisterStatic(mux)
 	return &Server{
 		Mux:        mux,
 		Repository: repository,

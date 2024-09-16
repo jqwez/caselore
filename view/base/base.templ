@@ -1,7 +1,17 @@
 package base
 
 templ Base() {
+	<!DOCTYPE html>
 	<html>
+	<head>
+	<title>Caselore</title>
+	<link rel="preload" href="/static/css/styles.css" as="style" onload="this.rel='stylesheet'" />
+	</head>
+	<body class="bg-gray-100" >
 		{ children... }
+		</body>
+		<footer>
+		<script src="/static/htmx/htmx.min.js"></script>
+		</footer>
 	</html>
 }

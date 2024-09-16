@@ -1,0 +1,71 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/jqwez/caselore/model"
+)
+
+
+
+type CasesProps struct {
+	Cases []model.Case
+}
+
+templ Cases(p CasesProps) {
+	<div class="">
+	<table class="min-w-full table-auto border-collapse border border-gray-300">
+	<thead>
+	<tr class="bg-slate-200">
+	<th class="px-6 py-2 border-b border-gray-300 text-left">Case Title</th>
+	<th class="px-6 py-2 border-b border-gray-300 text-left">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	for i, c := range p.Cases {
+		@CaseRow(i, c)
+	}
+	</tbody>
+	</table>
+	</div>
+}
+
+templ CaseRow(idx int, c model.Case) {
+	<tr 
+		hx-target="#main-dashboard-area" 
+		hx-swap="innerHTML" 
+		hx-get={string(templ.URL(fmt.Sprintf("/htmx/dashboard/cases/id/%s",c.Idea)))}
+		hx-trigger="click"
+		hx-select-oob="#header-breadcrumb"
+		if  idx % 2 == 0  {
+		class="border border-gray-300"
+		} else {
+		class="border border-gray-300 bg-slate-200"
+		}
+		>
+		<td class="px-6 py-4 truncate max-w-xs font-semibold hover:bg-slate-300 select-none cursor-pointer"> { c.Title } </td>
+		<td class="px-6 py-4 truncate max-w-xs font-semibold hover:bg-slate-300 select-none cursor-pointer"> { c.Description } </td>
+
+		
+	</tr>
+}
+
+templ CaseRowEdit(idx int, c model.Case) {
+		<tr 
+		if  idx % 2 == 0  {
+		class="border border-gray-300"
+		} else {
+		class="border border-gray-300 bg-slate-200"
+		}
+		>
+		<form>
+		<td class="px-6 py-4 truncate max-w-xs font-semibold hover:bg-slate-300 select-none cursor-pointer"> <input type="text" value={ c.Title } ></input> </td>
+		<td class="px-6 py-4 truncate max-w-xs font-semibold hover:bg-slate-300 select-none cursor-pointer"> { c.Description } </td>
+		</form>
+	</tr>
+}
+
+templ CaseCard(c model.Case) {
+	<div class="shadow-xl bg-grey-200">
+		
+	</div>
+}

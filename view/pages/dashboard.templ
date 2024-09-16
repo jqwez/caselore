@@ -1,0 +1,39 @@
+package pages
+
+import (
+	"github.com/jqwez/caselore/view/base"
+	"github.com/jqwez/caselore/view/components"
+	)
+
+templ Dashboard() {
+	@base.Base() {
+
+	@DesktopDashboard()
+
+	}
+}
+
+
+
+
+templ DesktopDashboard() {
+
+	<div id="desktop-view" class="min-h-screen hidden md:block grid grid-rows-[auto,1fr] grid-cols-1 ">
+		@components.Header( components.HeaderProps{Title:"Caselore"} )
+
+	<div id="sidebar-and-main" class="grid grid-cols-[8rem,1fr] min-h-screen">
+			@components.Sidebar()
+			@components.Main() {
+				<div class="p-4">
+				<h1 class="text-red-800"> Sample Text </h1>
+				</div>
+			}
+			@components.Toast(components.ToastProps{})
+	</div>
+	</div>
+	
+}
+
+templ MobileDashboard() {
+
+}
